@@ -68,7 +68,6 @@ export const renderUserTasks = (data) => {
 
       taskHeader.forEach(e => e.style.width = '28%');
       taskHeaderSVG.forEach(e => e.style.display = 'none');
-      // console.log(taskItem)
     })
 
 
