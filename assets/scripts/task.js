@@ -38,6 +38,25 @@ onload = () => {
   getUserTasks(token);
 };
 
+// const observer = new MutationObserver(() => {
+//   if (document.contains(taskBoard)) {
+//     const deleteTaskBtn = qsa('#deleteTask')
+//     deleteTaskBtn.forEach(e => {
+//       e.addEventListener('click', () => {
+//         let task = e.parentElement.parentElement;
+//         let id = task.getAttribute('task-id');
+//         console.log(task.id);
+//         // console.log(taskBoard.removeChild(task));
+//         deleteUserTask(token, id)
+//         task.parentNode.removeChild(task)
+//       })
+//       observer.disconnect();
+//     })
+//   };
+// });
+
+// observer.observe(taskBoard, { childList: true });
+
 // Função para adicionar tarefa
 taskBtn.addEventListener('click', e => {
   e.preventDefault();

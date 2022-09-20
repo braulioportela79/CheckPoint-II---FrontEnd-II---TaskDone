@@ -1,4 +1,5 @@
 import { renderUserTasks } from '../modules/renderUserTasks.js';
+
 // Base URL da API
 const baseUrl = 'https://ctd-todo-api.herokuapp.com/v1';
 
@@ -21,6 +22,7 @@ export const createUserTask = task => {
     body: task
   };
 
+  const taskBoard = gi('taskBoard')
   fetch(`${baseUrl}/tasks`, request)
     .then(result => { return result.json(); })
     .then(data => {
@@ -28,17 +30,13 @@ export const createUserTask = task => {
       sessionStorage.setItem('userTask', userTaskJson);
       const userTask = sessionStorage.getItem('userTask');
       const userTaskObj = JSON.parse(userTask);
-      console.log(userTaskObj)
       const userTasks = sessionStorage.getItem('userTasks')
       const userTasksObj = JSON.parse(userTasks)
       userTasksObj.push(userTaskObj)
-      console.log(userTasksObj)
+      taskBoard.innerHTML = ' ';
       let userTasksJson = JSON.stringify(userTasksObj)
       sessionStorage.setItem('userTasks', userTasksJson)
-      const taskBoard = gi('taskBoard')
-      taskBoard.innerHTML = ''
       renderUserTasks(userTasksObj)
-
     })
     .catch(err => console.log(err));
 };
