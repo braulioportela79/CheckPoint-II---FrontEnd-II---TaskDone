@@ -28,7 +28,8 @@ const userInfo = data => {
     userName.innerText = ' ';
 };
 
-const observer = new MutationObserver(() => {
+const observer = new MutationObserver((e) => {
+    // console.log(e)
     if (document.contains(userName)) {
         const userData = sessionStorage.getItem('user');
         const userObj = JSON.parse(userData);

@@ -45,10 +45,12 @@ onload = () => {
 //       e.addEventListener('click', () => {
 //         let task = e.parentElement.parentElement;
 //         let id = task.getAttribute('task-id');
-//         // console.log(task.id);
+//         console.log(task.id);
 //         // console.log(taskBoard.removeChild(task));
+//         deleteUserTask(token, id)
 //         task.parentNode.removeChild(task)
 //       })
+//       observer.disconnect();
 //     })
 //   };
 // });
@@ -61,6 +63,9 @@ taskBtn.addEventListener('click', e => {
   task.description = inputTask.value.replace(/\n/g, " ");
   taskJson = JSON.stringify(task);
   createUserTask(taskJson);
+
+
+
   form.reset();
 });
 

@@ -18,34 +18,29 @@ export const deleteUserTask = (token, taskId) => {
 
     fetch(`${baseUrl}/tasks/${taskId}`, request)
         .then(result => { return result.json(); })
-        .then(result => {
-
-            // taskBoard.removeChild()
-            console.log(result)
-        })
-
         .catch(err => console.log(err));
 };
 
-
-const observer = new MutationObserver((e) => {
-// console.log(e)
+const observer = new MutationObserver(() => {
     const deleteTaskBtn = qsa('#deleteTask')
     if (document.contains(taskBoard)) {
-        // console.log('123')
         deleteTaskBtn.forEach(e => {
-            console.log(e)
             e.addEventListener('click', () => {
                 const taskBoard = gi('taskBoard');
                 let task = e.parentElement.parentElement;
                 let id = task.getAttribute('task-id');
-                console.log(id)
-                deleteUserTask(token, id)
                 taskBoard.removeChild(task)
+                deleteUserTask(token, id)
+                const userTasks = sessionStorage.getItem('userTasks')
+                const userTasksObj = JSON.parse(userTasks)
+                const newUserTasksObj = userTasksObj.filter(e => e.id != id)
+                let userTasksJson = JSON.stringify(newUserTasksObj)
+                sessionStorage.setItem('userTasks', userTasksJson)
+                renderUserTasks(userTasksObj)
+                observer.disconnect();
             })
         })
     };
-    observer.disconnect();
 });
 
-observer.observe(taskBoard, { childList: true, characterData: false, subtree:true, attributes: true });
+observer.observe(taskBoard, { childList: true });
