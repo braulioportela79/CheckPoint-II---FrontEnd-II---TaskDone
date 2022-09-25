@@ -99,8 +99,8 @@ main {
 
 #logout p {
   position: absolute;
-  top: 4.5%;
-  right: 6.5%;
+  top: 30px;
+  right: 16px;
   color: rgb(var(--primary-color));
 }
 
