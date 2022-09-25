@@ -62,5 +62,5 @@ logoutBtn.addEventListener('click', e => {
   e.preventDefault();
   sessionStorage.removeItem('token');
   sessionStorage.removeItem('user');
-  location = '/';
+  location.href = '/index.html';
 });

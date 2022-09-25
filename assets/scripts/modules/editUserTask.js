@@ -3,12 +3,12 @@ import { updateTask } from '../api/updateTask.js';
 
 export const editUserTask = (e, token, event) => {
     // Variáveis dos Elementos da Tarefa
-    let task = e.parentElement.parentElement;
-    let id = task.getAttribute('task-id');
-    let taskDesc = e.parentElement.parentElement.childNodes[3];
-    let taskHeader = e.parentElement;
-    let cancelUpdateBtn = e.parentElement.parentElement.childNodes[5].children[0].childNodes[1];
-    let saveUpdateBtn = e.parentElement.parentElement.childNodes[5].children[0].childNodes[3];
+    const task = e.parentElement.parentElement;
+    const id = task.getAttribute('task-id');
+    const taskDesc = e.parentElement.parentElement.childNodes[3];
+    const taskHeader = e.parentElement;
+    const cancelUpdateBtn = e.parentElement.parentElement.childNodes[5].children[0].childNodes[1];
+    const saveUpdateBtn = e.parentElement.parentElement.childNodes[5].children[0].childNodes[3];
 
     // Pegar a tarefa no storage
     if (e.contains(event.target)) {
@@ -47,37 +47,47 @@ export const editUserTask = (e, token, event) => {
 
             // Salvar descrição atual da tarefa no storage
             sessionStorage.setItem('currentTextDesc', currentTextDesc);
-            
+
+            // Evento de key para registrar quando a tecla foi pressionada
             taskDesc.addEventListener('keydown', e => {
                 // Não permitir dar Enter ao editar a descrição
-                if (e.key === 'Enter') {
+                // Não permitir backspace e delete se a descrição tiver menos de 6 carácteres
+                if (e.key === 'Enter' || (e.key === 'Delete' && taskDesc.innerText.length <= 6)) {
                     e.preventDefault();
                 };
-            })
-            
-            // Evento de key para salvar a descrição da tarefa ao digitar no storage
-            console.log(e.parentElement.parentElement.childNodes[3])
-            taskDesc.addEventListener('keypress', e => {
-            
-                    console.log( taskDesc.innerText)
-                    console.log(taskDesc.innerText.length)
-                    var keycode = e.keyCode;
-                    var printable =
-                    (keycode > 47 && keycode < 58) || // number keys
-                    keycode == 32 || keycode == 13 || // spacebar & return key(s) (if you want to allow carriage returns)
-                    (keycode > 64 && keycode < 91) || // letter keys
-                    (keycode > 95 && keycode < 112) || // numpad keys
-                    (keycode > 185 && keycode < 193) || // ;=,-./` (in order)
-                    (keycode > 218 && keycode < 223);   // [\]' (in order)
-                    
-                // Não permitir dar Enter ao editar a descrição / máximo 96 carácteres
-                if (taskDesc.innerText.length > 96 && printable) {
-                    console.log('123')
-                    e.preventDefault();
-                };
-                currentTextDesc = taskDesc.innerText;
-                sessionStorage.setItem('currentTextDesc', currentTextDesc);
-            
+            });
+
+            // Evento de key para registrar quando a tecla foi levantada
+            taskDesc.addEventListener('keyup', () => {
+                // Evento de key para registrar quando a tecla foi pressionada
+                taskDesc.addEventListener('keydown', e => {
+
+                    // Variável da tecla
+                    const keycode = e.keyCode;
+
+                    // Variáveis com o código das teclas que digitam
+                    const printable =
+                        (keycode > 47 && keycode < 58) || // teclas dos números
+                        keycode == 32 || // barra de espaço
+                        (keycode > 64 && keycode < 91) || // teclas de letras
+                        (keycode > 95 && keycode < 112) || // teclas teclado númerico
+                        (keycode > 185 && keycode < 193) || // ;=,-./` 
+                        (keycode > 218 && keycode < 223);   // [\]' 
+
+                    // Não permitir dar Enter ao editar a descrição / máximo 96 carácteres
+                    if (taskDesc.innerText.length > 96 && printable) {
+                        e.preventDefault();
+                    };
+
+                    // Não permitir backspace e delete se a descrição tiver menos de 6 carácteres
+                    if (taskDesc.innerText.length <= 6 && (e.keyCode == 8 || e.keyCode == 46)) {
+                        e.preventDefault();
+                    };
+
+                    // Salvar a descrição da tarefa ao digitar no storage
+                    currentTextDesc = taskDesc.innerText;
+                    sessionStorage.setItem('currentTextDesc', currentTextDesc);
+                });
             });
 
             // Evento de clique no botão para salvar alteração na descrição da tarefa
@@ -90,8 +100,6 @@ export const editUserTask = (e, token, event) => {
                 if (currentStorageDesc != textDescStorage) {
 
                     // Atualizar a descrição da tarefa selecionada no storage
-                    // textDescStorage.replace(/\n/g, " ");
-                    // userTaskObj.description = textDescStorage.innerText.replace(/\n/g, " ");
                     userTaskObj.description = textDescStorage;
 
                     // Atualizar a tarefa na API
@@ -134,12 +142,11 @@ export const editUserTask = (e, token, event) => {
             const userTaskObj = JSON.parse(userTask);
 
             // Se a tarefa sendo editada tiver alteração do texto, mas não for clicado no botão para salvar
-            if (e.parentElement.parentElement.getAttribute('task-id') == userTaskObj.id) {
+            if (task.getAttribute('task-id') == userTaskObj.id) {
 
                 // Descrição da tarefa igual quando foi selecionada(sem alteração)
-                e.parentElement.parentElement.childNodes[3].innerHTML = userTaskObj.description;
+                taskDesc.innerText = userTaskObj.description;
             };
         };
     }, 500);
-
-}
+};

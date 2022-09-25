@@ -86,7 +86,7 @@ main {
 }
 
 #logout {
-  font-size: 1em;
+  font-size: 0.7em;
   cursor: pointer;
 }
 
@@ -99,8 +99,8 @@ main {
 
 #logout p {
   position: absolute;
-  top: 3%;
-  right: 5%;
+  top: 4.5%;
+  right: 6.5%;
   color: rgb(var(--primary-color));
 }
 
@@ -230,10 +230,11 @@ input:focus {
 }
 
 .task-board-header {
-  font-size: 2em;
+  font-size: 1.3em;
   text-transform: uppercase;
   font-weight: bold;
   color: rgb(var(--secondary-color));
+  text-align: center;
 }
 
 .right-sidebar {
