@@ -7,8 +7,9 @@ export const editUserTask = (e, token, event) => {
     const id = task.getAttribute('task-id');
     const taskDesc = e.parentElement.parentElement.childNodes[3];
     const taskHeader = e.parentElement;
-    const cancelUpdateBtn = e.parentElement.parentElement.childNodes[5].children[0].childNodes[1];
+    // const cancelUpdateBtn = e.parentElement.parentElement.childNodes[5].children[0].childNodes[1];
     const saveUpdateBtn = e.parentElement.parentElement.childNodes[5].children[0].childNodes[3];
+    const editBtn = document.querySelectorAll('#taskContainer .updateDesc svg')
 
     // Pegar a tarefa no storage
     if (e.contains(event.target)) {
@@ -38,8 +39,9 @@ export const editUserTask = (e, token, event) => {
             taskDesc.style.height = '174px';
 
             // Mostrar botões para salvar/cancelar edição da tarefa
-            cancelUpdateBtn.style.display = 'block';
-            saveUpdateBtn.style.display = 'block';
+            editBtn.forEach(e => {
+                e.style.display = 'inline-block';
+            });
 
             // Variáveis para texto da descrição atual na tarefa / descrição da tarefa selecionada no storage
             let currentTextDesc = taskDesc.innerText;
@@ -128,8 +130,9 @@ export const editUserTask = (e, token, event) => {
             taskDesc.setAttribute('contentEditable', false);
 
             // Esconder botões para salvar/cancelar edição da tarefa
-            saveUpdateBtn.style.display = 'none';
-            cancelUpdateBtn.style.display = 'none';
+            editBtn.forEach(e => {
+                e.style.display = 'none';
+            });
 
             // Mostrar Header da tarefa
             taskHeader.style.display = '';

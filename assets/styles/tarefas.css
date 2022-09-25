@@ -305,17 +305,79 @@ input:focus {
 #taskContainer .updateDesc {
   padding-left: 10px;
   display: flex;
+  /* width: 2000px; */
 }
-
 #taskContainer .updateDesc svg {
   height: 25px;
   width: 25px;
   cursor: pointer;
   display: none;
+  /* display: inline-block; */
 }
+
+#taskContainer .updateDesc svg:hover {
+  opacity: 0.5;
+  cursor: pointer;
+  transition: all ease-in-out 0.2s;
+}
+
 #taskContainer .footer {
   display: flex;
   width: 100%;
-  /* background: red; */
   justify-content: space-between;
+}
+
+.tooltiptext {
+  visibility: hidden;
+  width: 60px;
+  background-color: black;
+  color: #fff;
+  font-size: 0.6em;
+  text-align: center;
+  padding: 2px 0;
+  border-radius: 5px;
+  position: absolute;
+  z-index: 1;
+  top: -17px;
+  left: 0;
+  text-align: center;
+  letter-spacing: 0.1em;
+}
+
+#taskContainer .header #editTask:hover + .tooltiptext {
+  visibility: visible;
+}
+
+#taskContainer .header #deleteTask:hover + .tooltiptext {
+  visibility: visible;
+}
+
+.container #taskContainer .header #checkTask:hover + .tooltiptext {
+  visibility: visible;
+}
+
+.right-sidebar #taskContainer .header #checkTask:hover + .tooltiptext:after {
+  visibility: visible;
+  content: 'Desfazer';
+  width: 60px;
+  background-color: black;
+  text-align: center;
+  padding: 2px 0;
+  border-radius: 5px;
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  text-align: center;
+  letter-spacing: 0.1em;
+}
+
+#taskContainer .footer .updateDesc #cancelUpdate:hover + .tooltiptext {
+  visibility: visible;
+  opacity: 0.5;
+}
+
+#taskContainer .footer .updateDesc #saveUpdate:hover + .tooltiptext {
+  visibility: visible;
+  opacity: 0.5;
 }
