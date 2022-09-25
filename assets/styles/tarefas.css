@@ -201,6 +201,11 @@ input:focus {
   filter: brightness(1.03);
 }
 
+#createTaskButton:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
 .container {
   width: 60%;
   background: rgb(var(--secondary-bg-color));
@@ -221,7 +226,7 @@ input:focus {
   flex-wrap: wrap;
   gap: 10px;
   justify-content: space-around;
-  padding: 50px 30px;
+  padding: 50px 40px;
 }
 
 .task-board-header {
@@ -270,6 +275,8 @@ input:focus {
   word-break: break-word;
   font-family: 'Architects Daughter', cursive;
   font-weight: bold;
+  outline: none;
+  /* display: inline; */
 }
 
 #taskContainer .header svg {
@@ -292,4 +299,22 @@ input:focus {
   justify-content: right;
   display: flex;
   align-items: center;
+}
+
+#taskContainer .updateDesc {
+  padding-left: 10px;
+  display: flex;
+}
+
+#taskContainer .updateDesc svg {
+  height: 25px;
+  width: 25px;
+  cursor: pointer;
+  display: none;
+}
+#taskContainer .footer {
+  display: flex;
+  width: 100%;
+  /* background: red; */
+  justify-content: space-between;
 }
