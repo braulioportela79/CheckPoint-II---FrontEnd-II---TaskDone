@@ -8,7 +8,7 @@ export const editUserTask = (e, token, event) => {
     const taskDesc = e.parentElement.parentElement.childNodes[3];
     const taskHeader = e.parentElement;
     // const cancelUpdateBtn = e.parentElement.parentElement.childNodes[5].children[0].childNodes[1];
-    const saveUpdateBtn = e.parentElement.parentElement.childNodes[5].children[0].childNodes[5];
+    const saveUpdateBtn = e.parentElement.parentElement.childNodes[5].children[0].childNodes[3];
     const editBtn = document.querySelectorAll('#taskContainer .updateDesc svg')
 
     // Pegar a tarefa no storage
