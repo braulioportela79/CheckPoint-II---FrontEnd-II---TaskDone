@@ -2,6 +2,7 @@ import { getTask } from '../api/getTask.js';
 import { updateTask } from '../api/updateTask.js';
 
 export const editUserTask = (e, token, event) => {
+
     // Variáveis dos Elementos da Tarefa
     const task = e.parentElement.parentElement;
     const id = task.getAttribute('task-id');
@@ -41,12 +42,6 @@ export const editUserTask = (e, token, event) => {
             cancelUpdateBtn.style.display = 'block';
             saveUpdateBtn.style.display = 'block';
 
-            // Variáveis para texto da descrição atual na tarefa / descrição da tarefa selecionada no storage
-            let currentTextDesc = taskDesc.innerText;
-            let currentStorageDesc = userTaskObj.description;
-
-            // Salvar descrição atual da tarefa no storage
-            sessionStorage.setItem('currentTextDesc', currentTextDesc);
 
             // Evento de key para registrar quando a tecla foi pressionada
             taskDesc.addEventListener('keydown', e => {
@@ -59,6 +54,13 @@ export const editUserTask = (e, token, event) => {
 
             // Evento de key para registrar quando a tecla foi levantada
             taskDesc.addEventListener('keyup', () => {
+                
+                // Variável para texto da descrição atual na tarefa
+                let currentTextDesc = taskDesc.innerText;
+
+                // Salvar descrição atual da tarefa no storage
+                sessionStorage.setItem('currentTextDesc', currentTextDesc);
+
                 // Evento de key para registrar quando a tecla foi pressionada
                 taskDesc.addEventListener('keydown', e => {
 
@@ -92,13 +94,16 @@ export const editUserTask = (e, token, event) => {
 
             // Evento de clique no botão para salvar alteração na descrição da tarefa
             saveUpdateBtn.addEventListener('click', () => {
-
+                
+                //  Variável da descrição da tarefa selecionada no storage
+                let currentStorageDesc = userTaskObj.description;
+                
                 // Pegar a descrição da tarefa salvo no storage
                 let textDescStorage = sessionStorage.getItem('currentTextDesc');
-
+                
                 // Se a descrição da tarefa salva no storage for diferente da descrição da tarefa selecionada no storage
                 if (currentStorageDesc != textDescStorage) {
-
+                    
                     // Atualizar a descrição da tarefa selecionada no storage
                     userTaskObj.description = textDescStorage;
 
