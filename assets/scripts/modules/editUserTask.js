@@ -10,45 +10,48 @@ export const editUserTask = (e, token, event) => {
     const taskHeader = e.parentElement;
     const cancelUpdateBtn = e.parentElement.parentElement.childNodes[5].children[0].childNodes[1];
     const saveUpdateBtn = e.parentElement.parentElement.childNodes[5].children[0].childNodes[5];
-
+    const toolTip = e.parentElement.parentElement.childNodes[5].children[0].childNodes[9]
+    
+// toolTip.style.display = 'none'
     // Pegar a tarefa no storage
     if (e.contains(event.target)) {
         getTask(token, id);
     };
-
     // Setar tempo para pegar a tarefa
     setTimeout(() => {
-
+        
         // Pegar a tarefa no storage
         const userTask = sessionStorage.getItem('selectTask');
         const userTaskObj = JSON.parse(userTask);
+        console.log(toolTip)
 
         // Evento de Clique para editar a tarefa (ao clicar no botão / ao clicar na descrição da tarefa)
         if (e.contains(event.target) || (event.target.id == 'descrip' && document.activeElement == taskDesc)) {
-
+            
             // Habilitar editar texto na própria descrição da tarefa
             taskDesc.setAttribute('contentEditable', true);
 
             // Focar o prompt na descrição da tarefa para editar
             taskDesc.focus();
-
+            
             // Ocultar Botões do Header da tarefa
             taskHeader.style.display = 'none';
-
+            
             // Aumentar a altura da descrição da tarefa
             taskDesc.style.height = '174px';
-
+            
             // Mostrar botões para salvar/cancelar edição da tarefa
             cancelUpdateBtn.style.display = 'block';
             saveUpdateBtn.style.display = 'block';
-
-
+            
+            
             // Evento de key para registrar quando a tecla foi pressionada
             taskDesc.addEventListener('keydown', e => {
                 // Não permitir dar Enter ao editar a descrição
                 // Não permitir backspace e delete se a descrição tiver menos de 6 carácteres
                 if (e.key === 'Enter' || (e.key === 'Delete' && taskDesc.innerText.length <= 6)) {
                     e.preventDefault();
+                    
                 };
             });
 
@@ -60,30 +63,41 @@ export const editUserTask = (e, token, event) => {
 
                 // Salvar descrição atual da tarefa no storage
                 sessionStorage.setItem('currentTextDesc', currentTextDesc);
-
                 // Evento de key para registrar quando a tecla foi pressionada
                 taskDesc.addEventListener('keydown', e => {
-
+                    
                     // Variável da tecla
                     const keycode = e.keyCode;
 
                     // Variáveis com o código das teclas que digitam
                     const printable =
-                        (keycode > 47 && keycode < 58) || // teclas dos números
-                        keycode == 32 || // barra de espaço
-                        (keycode > 64 && keycode < 91) || // teclas de letras
-                        (keycode > 95 && keycode < 112) || // teclas teclado númerico
+                    (keycode > 47 && keycode < 58) || // teclas dos números
+                    keycode == 32 || // barra de espaço
+                    (keycode > 64 && keycode < 91) || // teclas de letras
+                    (keycode > 95 && keycode < 112) || // teclas teclado númerico
                         (keycode > 185 && keycode < 193) || // ;=,-./` 
                         (keycode > 218 && keycode < 223);   // [\]' 
+                        
+                        // Não permitir dar Enter ao editar a descrição / máximo 96 carácteres
+                        if (taskDesc.innerText.length > 96 && printable) {
+                            toolTip.style.display = '';
+                            toolTip.innerText = 'Máximo 96 carácteres';
+                            setTimeout(()=>{
+                                toolTip.style.display = 'none';
+                            }, 4000);
+                            toolTip.style.display = 'block';
+                            e.preventDefault();
+                        };
 
-                    // Não permitir dar Enter ao editar a descrição / máximo 96 carácteres
-                    if (taskDesc.innerText.length > 96 && printable) {
-                        e.preventDefault();
-                    };
-
-                    // Não permitir backspace e delete se a descrição tiver menos de 6 carácteres
-                    if (taskDesc.innerText.length <= 6 && (e.keyCode == 8 || e.keyCode == 46)) {
-                        e.preventDefault();
+                        // Não permitir backspace e delete se a descrição tiver menos de 6 carácteres
+                        if (taskDesc.innerText.length <= 6 && (e.keyCode == 8 || e.keyCode == 46)) {
+                            toolTip.style.display = '';
+                            toolTip.innerText = 'Mínimo 6 carácteres';
+                            setTimeout(()=>{
+                                toolTip.style.display = 'none';
+                            }, 4000);
+                            toolTip.style.display = 'block';
+                            e.preventDefault();
                     };
 
                     // Salvar a descrição da tarefa ao digitar no storage
