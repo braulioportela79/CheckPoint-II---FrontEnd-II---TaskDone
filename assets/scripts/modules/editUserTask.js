@@ -11,9 +11,7 @@ export const editUserTask = (e, token, event) => {
     const cancelUpdateBtn = e.parentElement.parentElement.childNodes[5].children[0].childNodes[1];
     const saveUpdateBtn = e.parentElement.parentElement.childNodes[5].children[0].childNodes[5];
     const toolTip = e.parentElement.parentElement.childNodes[5].children[0].childNodes[9]
-    const editTaskBtn = document.querySelectorAll('#editTask')
 
-    // toolTip.style.display = 'none'
     // Pegar a tarefa no storage
     if (e.contains(event.target)) {
         getTask(token, id);
@@ -28,8 +26,13 @@ export const editUserTask = (e, token, event) => {
         // Evento de Clique para editar a tarefa (ao clicar no botão / ao clicar na descrição da tarefa)
         if (e.contains(event.target) || (event.target.id == 'descrip' && document.activeElement == taskDesc)) {
 
+
             // Habilitar editar texto na própria descrição da tarefa
             taskDesc.setAttribute('contentEditable', true);
+
+            // Desabilitar arrastar tarefa enquanto edita
+            task.setAttribute('draggable', false);
+            task.style.cursor = '';
 
             // Focar o prompt na descrição da tarefa para editar
             taskDesc.focus();
@@ -37,15 +40,12 @@ export const editUserTask = (e, token, event) => {
             // Ocultar Botões do Header da tarefa
             taskHeader.style.display = 'none';
 
-            // editTaskBtn.forEach(e => e.style.display = 'none')
-
             // Aumentar a altura da descrição da tarefa
             taskDesc.style.height = '174px';
 
             // Mostrar botões para salvar/cancelar edição da tarefa
             cancelUpdateBtn.style.display = 'block';
             saveUpdateBtn.style.display = 'block';
-
 
             // Evento de key para registrar quando a tecla foi pressionada
             taskDesc.addEventListener('keydown', e => {
@@ -65,12 +65,13 @@ export const editUserTask = (e, token, event) => {
 
                 // Salvar descrição atual da tarefa no storage
                 sessionStorage.setItem('currentTextDesc', currentTextDesc);
+
                 // Evento de key para registrar quando a tecla foi pressionada
                 taskDesc.addEventListener('keydown', e => {
 
                     // Variável da tecla
                     const keycode = e.keyCode;
-                    
+
                     // Variáveis com o código das teclas que digitam
                     const printable =
                         (keycode > 47 && keycode < 58) || // teclas dos números
@@ -81,7 +82,7 @@ export const editUserTask = (e, token, event) => {
                         (keycode > 218 && keycode < 223);   // [\]' 
 
                     // Não permitir dar Enter ao editar a descrição / máximo 96 carácteres
-                    if (taskDesc.innerText.length > 96 && printable) {
+                    if (taskDesc.innerText.length >= 96 && printable) {
                         toolTip.style.display = '';
                         toolTip.innerText = 'Máximo 96 carácteres';
                         setTimeout(() => {
@@ -113,10 +114,10 @@ export const editUserTask = (e, token, event) => {
 
                 //  Variável da descrição da tarefa selecionada no storage
                 let currentStorageDesc = userTaskObj.description;
-                
+
                 // Pegar a descrição da tarefa salvo no storage
                 let textDescStorage = sessionStorage.getItem('currentTextDesc');
-                
+
                 // Se a descrição da tarefa salva no storage for diferente da descrição da tarefa selecionada no storage
                 if (currentStorageDesc != textDescStorage) {
 
@@ -127,7 +128,7 @@ export const editUserTask = (e, token, event) => {
                     let userTaskJson = JSON.stringify(userTaskObj);
                     sessionStorage.setItem('selectTask', userTaskJson);
                     updateTask(token, id, userTaskJson);
-                    
+
                     // Atualizar a lista de tarefas no storage
                     let updatedTask = userTaskObj;
                     const userTasks = sessionStorage.getItem('userTasks');
@@ -148,6 +149,10 @@ export const editUserTask = (e, token, event) => {
             // Desabilitar edição da tarefa
             taskDesc.setAttribute('contentEditable', false);
 
+            // Habilitar arrastar tarefa quando não edita
+            task.setAttribute('draggable', true);
+            task.style.cursor = 'grab';
+
             // Esconder botões para salvar/cancelar edição da tarefa
             saveUpdateBtn.style.display = 'none';
             cancelUpdateBtn.style.display = 'none';
@@ -157,18 +162,6 @@ export const editUserTask = (e, token, event) => {
 
             // Voltar altura da descrição da tarefa original
             taskDesc.style.height = '150px';
-
-            // Atualizar a lista de tarefas no storage
-            let updatedTask = userTaskObj;
-            const userTasks = sessionStorage.getItem('userTasks');
-            const userTasksObj = JSON.parse(userTasks);
-            const indexOfItemInArray = userTasksObj.findIndex(q => q.id == updatedTask.id);
-            userTasksObj[indexOfItemInArray] = updatedTask;
-            console.log(updatedTask)
-
-            // Pegar tarefa selecionada no storage
-            // const userTask = sessionStorage.getItem('selectTask');
-            // const userTaskObj = JSON.parse(userTask);
 
             // Se a tarefa sendo editada tiver alteração do texto, mas não for clicado no botão para salvar
             if (task.getAttribute('task-id') == userTaskObj.id) {

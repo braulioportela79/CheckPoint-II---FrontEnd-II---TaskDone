@@ -10,8 +10,13 @@ const errorValidation = qs('.error');
 // Variável do campo e-mail
 const inputEmail = gi('inputEmail');
 
+const submitBtnTxt = qs('.submit-button span');
+const submitLoadSpinner = qs('.submit-button .loader');
+
 //Requisição API Cadastro Usuário
 export const signUpUser = user => {
+    submitBtnTxt.style.display = 'none';
+    submitLoadSpinner.style.display = 'block';
     const request = {
         method: "POST",
         headers: {
@@ -35,16 +40,18 @@ export const signUpUser = user => {
 // Função Cadastro com Sucesso
 const successSignup = result => {
     sessionStorage.setItem('token', result.jwt);
-    location.href = '/index.html';
+    location.href = '../index.html';
 };
 
 // Função Cadastro com Erro
 const errorSignup = err => {
-    if (err.status === 400) {
+    if (err.status === 400 || err.status === 404) {
         errorValidation.innerText = 'Usuário já cadastrado!';
+        submitLoadSpinner.style.display = 'none';
+        submitBtnTxt.style.display = '';
         inputEmail.focus();
         setTimeout(() => {
             errorValidation.innerText = '';
-        }, 5000);
+        }, 3000);
     };
 };
